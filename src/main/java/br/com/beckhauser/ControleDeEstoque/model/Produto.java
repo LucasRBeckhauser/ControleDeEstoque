@@ -15,15 +15,18 @@ public class Produto extends EntityId {
     @Column(name = "valor_produto",nullable = false)
     private Double valor;
 
+    @Column(name = "quantidade_estoque", nullable = false)
+    private int quantidadeEmEstoque;
+
     public Produto() {
     }
 
-    public Produto(String nome, String descricao, Double valor) {
+    public Produto(String nome, String descricao, Double valor, int quantidadeEmEstoque) {
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
+        this.quantidadeEmEstoque = quantidadeEmEstoque;
     }
-
 
     public String getNome() {
         return nome;
@@ -47,5 +50,13 @@ public class Produto extends EntityId {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public int getQuantidadeEmEstoque() {
+        return quantidadeEmEstoque;
+    }
+
+    public void setQuantidadeEmEstoque(int quantidadeEmEstoque) {
+        this.quantidadeEmEstoque = quantidadeEmEstoque;
     }
 }

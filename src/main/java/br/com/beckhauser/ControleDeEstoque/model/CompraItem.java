@@ -1,5 +1,6 @@
 package br.com.beckhauser.ControleDeEstoque.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,12 +16,20 @@ public class CompraItem extends EntityId{
     @JoinColumn(name = "compra_id", nullable = false)
     private Compra compra;
 
+    @Column(nullable = false)
+    private int quantidade;
+
+    @Column(nullable = false)
+    private Double valorProduto;
+
     public CompraItem() {
     }
 
-    public CompraItem(Produto produto, Compra compra) {
+    public CompraItem(Produto produto, Compra compra, int quantidade, Double valorProduto) {
         this.produto = produto;
         this.compra = compra;
+        this.quantidade = quantidade;
+        this.valorProduto = valorProduto;
     }
 
     public Produto getProduto() {
@@ -37,5 +46,21 @@ public class CompraItem extends EntityId{
 
     public void setCompra(Compra compra) {
         this.compra = compra;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public Double getValorProduto() {
+        return valorProduto;
+    }
+
+    public void setValorProduto(Double valorProduto) {
+        this.valorProduto = valorProduto;
     }
 }
