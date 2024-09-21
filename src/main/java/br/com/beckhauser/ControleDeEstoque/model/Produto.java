@@ -59,4 +59,5 @@ public class Produto extends EntityId {
     public void setQuantidadeEmEstoque(int quantidadeEmEstoque) {
         this.quantidadeEmEstoque = quantidadeEmEstoque;
     }
+
 }

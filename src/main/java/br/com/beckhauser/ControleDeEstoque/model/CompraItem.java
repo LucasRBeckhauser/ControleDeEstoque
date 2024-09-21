@@ -63,4 +63,5 @@ public class CompraItem extends EntityId{
     public void setValorProduto(Double valorProduto) {
         this.valorProduto = valorProduto;
     }
+
 }

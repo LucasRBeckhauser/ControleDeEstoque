@@ -12,4 +12,28 @@ public class Venda extends EntityId {
 
     @Column(nullable = false)
     private LocalDate dataVenda;
+
+    public Venda() {
+    }
+
+    public Venda(List<VendaItem> itensVenda, LocalDate dataVenda) {
+        this.itensVenda = itensVenda;
+        this.dataVenda = dataVenda;
+    }
+
+    public List<VendaItem> getItensVenda() {
+        return itensVenda;
+    }
+
+    public void setItensVenda(List<VendaItem> itensVenda) {
+        this.itensVenda = itensVenda;
+    }
+
+    public LocalDate getDataVenda() {
+        return dataVenda;
+    }
+
+    public void setDataVenda(LocalDate dataVenda) {
+        this.dataVenda = dataVenda;
+    }
 }

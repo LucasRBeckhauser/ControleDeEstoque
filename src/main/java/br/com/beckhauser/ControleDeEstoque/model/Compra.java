@@ -36,4 +36,5 @@ public class Compra extends EntityId {
     public void setDataCompra(LocalDate dataCompra) {
         this.dataCompra = dataCompra;
     }
+
 }
