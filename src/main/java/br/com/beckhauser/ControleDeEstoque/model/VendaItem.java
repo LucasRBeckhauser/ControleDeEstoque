@@ -16,20 +16,16 @@ public class VendaItem extends EntityId{
     @JoinColumn(name = "venda_id", nullable = false)
     private Venda venda;
 
-    @Column(nullable = false)
-    private int quantidade;
-
-    @Column(nullable = false)
-    private Double valorProduto;
+    @Column(nullable = false,name = "quantidade_vendida")
+    private int quantidadeVendida;
 
     public VendaItem() {
     }
 
-    public VendaItem(Produto produto, Venda venda, int quantidade, Double valorProduto) {
+    public VendaItem(Produto produto, Venda venda, int quantidadeVendida) {
         this.produto = produto;
         this.venda = venda;
-        this.quantidade = quantidade;
-        this.valorProduto = valorProduto;
+        this.quantidadeVendida = quantidadeVendida;
     }
 
     public Produto getProduto() {
@@ -48,20 +44,11 @@ public class VendaItem extends EntityId{
         this.venda = venda;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantidadeVendida() {
+        return quantidadeVendida;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantidadeVendida(int quantidadeVendida) {
+        this.quantidadeVendida = quantidadeVendida;
     }
-
-    public Double getValorProduto() {
-        return valorProduto;
-    }
-
-    public void setValorProduto(Double valorProduto) {
-        this.valorProduto = valorProduto;
-    }
-
 }

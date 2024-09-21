@@ -16,20 +16,18 @@ public class CompraItem extends EntityId{
     @JoinColumn(name = "compra_id", nullable = false)
     private Compra compra;
 
-    @Column(nullable = false)
-    private int quantidade;
+    @Column(nullable = false,name = "quantidade_comprada")
+    private int quantidadeComprada;
 
-    @Column(nullable = false)
-    private Double valorProduto;
+
 
     public CompraItem() {
     }
 
-    public CompraItem(Produto produto, Compra compra, int quantidade, Double valorProduto) {
+    public CompraItem(Produto produto, Compra compra, int quantidadeComprada) {
         this.produto = produto;
         this.compra = compra;
-        this.quantidade = quantidade;
-        this.valorProduto = valorProduto;
+        this.quantidadeComprada = quantidadeComprada;
     }
 
     public Produto getProduto() {
@@ -48,20 +46,11 @@ public class CompraItem extends EntityId{
         this.compra = compra;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantidadeComprada() {
+        return quantidadeComprada;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantidadeComprada(int quantidadeComprada) {
+        this.quantidadeComprada = quantidadeComprada;
     }
-
-    public Double getValorProduto() {
-        return valorProduto;
-    }
-
-    public void setValorProduto(Double valorProduto) {
-        this.valorProduto = valorProduto;
-    }
-
 }
