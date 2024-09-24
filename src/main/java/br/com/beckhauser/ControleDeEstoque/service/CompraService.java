@@ -8,6 +8,8 @@ import br.com.beckhauser.ControleDeEstoque.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CompraService {
 
@@ -38,5 +40,11 @@ public class CompraService {
 
         return compraRepository.save(compra);
     }
+
+    // GET
+    public List<Compra> listarCompras() {
+        return compraRepository.findAll();
+    }
+
 
 }
