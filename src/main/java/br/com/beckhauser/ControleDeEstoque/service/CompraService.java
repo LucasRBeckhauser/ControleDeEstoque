@@ -1,11 +1,13 @@
 package br.com.beckhauser.ControleDeEstoque.service;
 
+import br.com.beckhauser.ControleDeEstoque.enterprise.ValidationException;
 import br.com.beckhauser.ControleDeEstoque.model.Compra;
 import br.com.beckhauser.ControleDeEstoque.model.CompraItem;
 import br.com.beckhauser.ControleDeEstoque.model.Produto;
 import br.com.beckhauser.ControleDeEstoque.repository.CompraRepository;
 import br.com.beckhauser.ControleDeEstoque.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,27 +15,21 @@ import java.util.List;
 @Service
 public class CompraService {
 
-    private final CompraRepository compraRepository;
-    private final ProdutoRepository produtoRepository;
+    @Autowired
+    private CompraRepository compraRepository;
 
-    public CompraService(CompraRepository compraRepository, ProdutoRepository produtoRepository) {
-        this.compraRepository = compraRepository;
-        this.produtoRepository = produtoRepository;
-    }
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Transactional
-    public Compra realizarCompra(Compra compra) throws Exception {
+    public Compra realizarCompra(Compra compra) throws ValidationException {
 
-        // Validação de Compra itens | POST
         for (CompraItem item : compra.getItensCompra()) {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
-                    .orElseThrow(() -> new Exception("Produto não encontrado: " + item.getProduto().getNome()));
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            if (item.getQuantidadeComprada() <= 0) {
-                throw new Exception("Quantidade comprada deve ser positiva para o produto: " + produto.getNome());
-            }
+            validarQuantidadePositiva(item.getQuantidadeComprada(), produto.getNome());
 
-            // Atualiza o estoque do produto
             produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeComprada());
             produtoRepository.save(produto);
         }
@@ -41,10 +37,14 @@ public class CompraService {
         return compraRepository.save(compra);
     }
 
+    private void validarQuantidadePositiva(int quantidade, String nomeProduto) {
+        if (quantidade <= 0) {
+            throw new ValidationException("Quantidade comprada deve ser positiva para o produto: " + nomeProduto);
+        }
+    }
+
     // GET
     public List<Compra> listarCompras() {
         return compraRepository.findAll();
     }
-
-
 }

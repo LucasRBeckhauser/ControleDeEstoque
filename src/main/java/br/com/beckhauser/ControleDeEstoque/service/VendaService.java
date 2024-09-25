@@ -1,11 +1,13 @@
 package br.com.beckhauser.ControleDeEstoque.service;
 
+import br.com.beckhauser.ControleDeEstoque.enterprise.ValidationException;
 import br.com.beckhauser.ControleDeEstoque.model.Produto;
 import br.com.beckhauser.ControleDeEstoque.model.Venda;
 import br.com.beckhauser.ControleDeEstoque.model.VendaItem;
 import br.com.beckhauser.ControleDeEstoque.repository.ProdutoRepository;
 import br.com.beckhauser.ControleDeEstoque.repository.VendaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,40 +15,42 @@ import java.util.List;
 @Service
 public class VendaService {
 
-    private final VendaRepository vendaRepository;
-    private final ProdutoRepository produtoRepository;
+    @Autowired
+    private VendaRepository vendaRepository;
 
-    public VendaService(VendaRepository vendaRepository, ProdutoRepository produtoRepository) {
-        this.vendaRepository = vendaRepository;
-        this.produtoRepository = produtoRepository;
-    }
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Transactional
-    public Venda realizarVenda(Venda venda) throws Exception {
+    public Venda realizarVenda(Venda venda) throws ValidationException {
 
-        // Validação de Venda itens | POST
         for (VendaItem item : venda.getItensVenda()) {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
-                    .orElseThrow(() -> new Exception("Produto não encontrado: " + item.getProduto().getNome()));
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            if (item.getQuantidadeVendida() <= 0) {
-                throw new Exception("Quantidade vendida deve ser positiva para o produto: " + produto.getNome());
-            }
+            validarQuantidadePositiva(item.getQuantidadeVendida(), produto.getNome());
 
             if (produto.getQuantidadeEmEstoque() < item.getQuantidadeVendida()) {
-                throw new Exception("Estoque insuficiente para o produto: " + produto.getNome());
+                throw new ValidationException("Estoque insuficiente para o produto: " + produto.getNome());
             }
 
-            // Atualiza o estoque do produto
             produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeVendida());
             produtoRepository.save(produto);
         }
 
         return vendaRepository.save(venda);
     }
-    //GET
+
+    private void validarQuantidadePositiva(int quantidade, String nomeProduto) {
+        if (quantidade <= 0) {
+            throw new ValidationException("Quantidade vendida deve ser positiva para o produto: " + nomeProduto);
+        }
+    }
+
+    // GET
     public List<Venda> listarVendas() {
         return vendaRepository.findAll();
     }
 }
+
 
