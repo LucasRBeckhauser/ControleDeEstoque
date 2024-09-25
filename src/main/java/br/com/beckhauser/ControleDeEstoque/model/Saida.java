@@ -6,26 +6,30 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Venda extends EntityId {
+public class Saida extends EntityId {
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<VendaItem> itensVenda;
+    private List<SaidaItem> itensVenda;
 
     @Column(nullable = false)
     private LocalDate dataVenda;
 
-    public Venda() {
+    //usuario que ela esta vinculado
+
+
+
+    public Saida() {
     }
 
-    public Venda(List<VendaItem> itensVenda, LocalDate dataVenda) {
+    public Saida(List<SaidaItem> itensVenda, LocalDate dataVenda) {
         this.itensVenda = itensVenda;
         this.dataVenda = dataVenda;
     }
 
-    public List<VendaItem> getItensVenda() {
+    public List<SaidaItem> getItensVenda() {
         return itensVenda;
     }
 
-    public void setItensVenda(List<VendaItem> itensVenda) {
+    public void setItensVenda(List<SaidaItem> itensVenda) {
         this.itensVenda = itensVenda;
     }
 

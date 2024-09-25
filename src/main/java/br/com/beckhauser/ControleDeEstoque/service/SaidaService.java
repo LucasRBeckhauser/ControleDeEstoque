@@ -2,10 +2,10 @@ package br.com.beckhauser.ControleDeEstoque.service;
 
 import br.com.beckhauser.ControleDeEstoque.enterprise.ValidationException;
 import br.com.beckhauser.ControleDeEstoque.model.Produto;
-import br.com.beckhauser.ControleDeEstoque.model.Venda;
-import br.com.beckhauser.ControleDeEstoque.model.VendaItem;
+import br.com.beckhauser.ControleDeEstoque.model.Saida;
+import br.com.beckhauser.ControleDeEstoque.model.SaidaItem;
 import br.com.beckhauser.ControleDeEstoque.repository.ProdutoRepository;
-import br.com.beckhauser.ControleDeEstoque.repository.VendaRepository;
+import br.com.beckhauser.ControleDeEstoque.repository.SaidaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VendaService {
+public class SaidaService {
 
     @Autowired
-    private VendaRepository vendaRepository;
+    private SaidaRepository saidaRepository;
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
     @Transactional
-    public Venda realizarVenda(Venda venda) throws ValidationException {
+    public Saida realizarVenda(Saida saida) throws ValidationException {
 
-        for (VendaItem item : venda.getItensVenda()) {
+        for (SaidaItem item : saida.getItensVenda()) {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
@@ -38,7 +38,7 @@ public class VendaService {
             produtoRepository.save(produto);
         }
 
-        return vendaRepository.save(venda);
+        return saidaRepository.save(saida);
     }
 
     private void validarQuantidadePositiva(int quantidade, String nomeProduto) {
@@ -48,8 +48,8 @@ public class VendaService {
     }
 
     // GET
-    public List<Venda> listarVendas() {
-        return vendaRepository.findAll();
+    public List<Saida> listarVendas() {
+        return saidaRepository.findAll();
     }
 }
 

@@ -1,10 +1,9 @@
 package br.com.beckhauser.ControleDeEstoque.service;
 
 import br.com.beckhauser.ControleDeEstoque.enterprise.ValidationException;
-import br.com.beckhauser.ControleDeEstoque.model.Compra;
-import br.com.beckhauser.ControleDeEstoque.model.CompraItem;
+import br.com.beckhauser.ControleDeEstoque.model.Entrada;
 import br.com.beckhauser.ControleDeEstoque.model.Produto;
-import br.com.beckhauser.ControleDeEstoque.repository.CompraRepository;
+import br.com.beckhauser.ControleDeEstoque.repository.EntradaRepository;
 import br.com.beckhauser.ControleDeEstoque.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +12,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CompraService {
+public class EntradaService {
 
     @Autowired
-    private CompraRepository compraRepository;
+    private EntradaRepository entradaRepository;
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    @Transactional
-    public Compra realizarCompra(Compra compra) throws ValidationException {
 
-        for (CompraItem item : compra.getItensCompra()) {
+    //dessa forma tu tem só o obj de compra e n dos itens, o certo é passar
+    //por parametro uma lista de compra itens List<CompraItens>
+    //que ai tu tem de fato o obj de itens
+    //pq se n dessa forma ele vai tentar percorrer uma lista null
+
+    @Transactional
+    public Entrada realizarCompra(Entrada entrada) throws ValidationException {
+
+        entrada.getItensCompra().forEach(item ->  {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
@@ -32,9 +37,9 @@ public class CompraService {
 
             produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeComprada());
             produtoRepository.save(produto);
-        }
+        });
 
-        return compraRepository.save(compra);
+        return entradaRepository.save(entrada);
     }
 
     private void validarQuantidadePositiva(int quantidade, String nomeProduto) {
@@ -44,7 +49,7 @@ public class CompraService {
     }
 
     // GET
-    public List<Compra> listarCompras() {
-        return compraRepository.findAll();
+    public List<Entrada> listarCompras() {
+        return entradaRepository.findAll();
     }
 }

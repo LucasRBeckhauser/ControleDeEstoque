@@ -6,7 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class VendaItem extends EntityId{
+public class SaidaItem extends EntityId{
 
     @ManyToOne
     @JoinColumn(name = "produto_id", nullable = false)
@@ -14,17 +14,17 @@ public class VendaItem extends EntityId{
 
     @ManyToOne
     @JoinColumn(name = "venda_id", nullable = false)
-    private Venda venda;
+    private Saida venda;
 
     @Column(nullable = false,name = "quantidade_vendida")
     private int quantidadeVendida;
 
-    public VendaItem() {
+    public SaidaItem() {
     }
 
-    public VendaItem(Produto produto, Venda venda, int quantidadeVendida) {
+    public SaidaItem(Produto produto, Saida saida, int quantidadeVendida) {
         this.produto = produto;
-        this.venda = venda;
+        this.venda = saida;
         this.quantidadeVendida = quantidadeVendida;
     }
 
@@ -36,12 +36,12 @@ public class VendaItem extends EntityId{
         this.produto = produto;
     }
 
-    public Venda getVenda() {
+    public Saida getVenda() {
         return venda;
     }
 
-    public void setVenda(Venda venda) {
-        this.venda = venda;
+    public void setVenda(Saida saida) {
+        this.venda = saida;
     }
 
     public int getQuantidadeVendida() {
