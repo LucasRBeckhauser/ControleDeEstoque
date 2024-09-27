@@ -48,6 +48,44 @@ public class EntradaService {
         }
     }
 
+
+    // Put
+    @Transactional
+    public Entrada alterarEntrada(Long id, Entrada novaEntrada) throws ValidationException {
+        Entrada entradaAtual = entradaRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Entrada não encontrada para o ID: " + id));
+
+        entradaAtual.getItensCompra().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            // Subtrai a quantidade comprada anteriormente do estoque
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeComprada());
+            produtoRepository.save(produto);
+        });
+
+        // Aplica as novas quantidades da nova entrada
+        novaEntrada.getItensCompra().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            // Valida e atualiza o estoque com a nova quantidade
+            validarQuantidadePositiva(item.getQuantidadeComprada(), produto.getNome());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeComprada());
+
+            // Atualiza outros atributos do produto
+            produto.setNome(item.getProduto().getNome());
+            produto.setDescricao(item.getProduto().getDescricao());
+            produto.setValor(item.getProduto().getValor());
+
+            produtoRepository.save(produto);
+
+        });
+
+        return entradaRepository.save(novaEntrada);
+    }
+
+
     // GET
     public List<Entrada> listarCompras() {
         return entradaRepository.findAll();

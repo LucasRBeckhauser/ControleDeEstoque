@@ -47,6 +47,45 @@ public class SaidaService {
         }
     }
 
+    @Transactional
+    public Saida alterarSaida(Long id, Saida novaSaida) throws ValidationException {
+        Saida saidaAtual = saidaRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Saída não encontrada para o ID: " + id));
+
+        saidaAtual.getItensVenda().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            // Adiciona a quantidade vendida anteriormente de volta ao estoque
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeVendida());
+            produtoRepository.save(produto);
+        });
+
+        // Aplica as novas quantidades da nova saída e atualiza outros atributos
+        novaSaida.getItensVenda().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            validarQuantidadePositiva(item.getQuantidadeVendida(), produto.getNome());
+
+            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeVendida()) {
+                throw new ValidationException("Estoque insuficiente para o produto: " + produto.getNome());
+            }
+
+            // Atualiza o estoque com a nova quantidade
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeVendida());
+
+            // Atualiza outros atributos do produto
+            produto.setNome(item.getProduto().getNome());
+            produto.setDescricao(item.getProduto().getDescricao());
+            produto.setValor(item.getProduto().getValor());
+
+            produtoRepository.save(produto);
+        });
+
+        return saidaRepository.save(novaSaida);
+    }
+
     // GET
     public List<Saida> listarVendas() {
         return saidaRepository.findAll();
