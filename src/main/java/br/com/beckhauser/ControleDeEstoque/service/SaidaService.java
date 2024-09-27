@@ -90,6 +90,26 @@ public class SaidaService {
     public List<Saida> listarVendas() {
         return saidaRepository.findAll();
     }
+
+    //DELETE
+    @Transactional
+    public void excluirSaida(Long id) throws ValidationException {
+        Saida saida = saidaRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Saída não encontrada para o ID: " + id));
+
+        // Para cada item de venda, adicionar a quantidade vendida de volta ao estoque
+        saida.getItensVenda().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            // Adiciona a quantidade vendida de volta ao estoque
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeVendida());
+            produtoRepository.save(produto);
+        });
+
+        // Exclui a saída após atualizar o estoque
+        saidaRepository.deleteById(id);
+    }
 }
 
 

@@ -26,6 +26,8 @@ public class EntradaService {
     //que ai tu tem de fato o obj de itens
     //pq se n dessa forma ele vai tentar percorrer uma lista null
 
+
+    //POST
     @Transactional
     public Entrada realizarCompra(Entrada entrada) throws ValidationException {
 
@@ -90,4 +92,29 @@ public class EntradaService {
     public List<Entrada> listarCompras() {
         return entradaRepository.findAll();
     }
+
+    //DELETE
+    @Transactional
+    public void excluirEntrada(Long id) throws ValidationException {
+        Entrada entrada = entradaRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Entrada não encontrada para o ID: " + id));
+
+        // Para cada item de compra, subtrair a quantidade comprada do estoque
+        entrada.getItensCompra().forEach(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
+
+            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeComprada()) {
+                throw new ValidationException("Erro ao excluir a entrada: o estoque não pode ficar negativo para o produto: " + produto.getNome());
+            }
+
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeComprada());
+            produtoRepository.save(produto);
+        });
+
+        // Exclui a entrada após atualizar o estoque
+        entradaRepository.deleteById(id);
+    }
 }
+
+

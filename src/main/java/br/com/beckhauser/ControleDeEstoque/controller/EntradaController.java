@@ -30,15 +30,15 @@ public class EntradaController {
     }
 
 
-    @PutMapping("{id}")
-    public  ResponseEntity update(@PathVariable("id") Long id, @RequestBody Doacao entity) {
-        Doacao alterado = service.alterar(id, entity);
-        return ResponseEntity.ok().body(alterado);
+//    @PutMapping("{id}")
+//    public  ResponseEntity update(@PathVariable("id") Long id, @RequestBody Doacao entity) {
+//        Doacao alterado = service.alterar(id, entity);
+//        return ResponseEntity.ok().body(alterado);
+//    }
+//
+//    @DeleteMapping("{id}")
+//    public ResponseEntity remove(@PathVariable("id") Long id) {
+//        service.remover(id);
+//        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity remove(@PathVariable("id") Long id) {
-        service.remover(id);
-        return ResponseEntity.noContent().build();
-    }
-}
