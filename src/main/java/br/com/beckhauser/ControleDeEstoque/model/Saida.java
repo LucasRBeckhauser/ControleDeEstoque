@@ -7,11 +7,11 @@ import java.util.List;
 
 @Entity
 public class Saida extends EntityId {
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "saida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SaidaItem> itensVenda;
 
     @Column(nullable = false)
-    private LocalDate dataVenda;
+    private LocalDate dataSaida;
 
     //usuario que ela esta vinculado
 
@@ -20,9 +20,9 @@ public class Saida extends EntityId {
     public Saida() {
     }
 
-    public Saida(List<SaidaItem> itensVenda, LocalDate dataVenda) {
+    public Saida(List<SaidaItem> itensVenda, LocalDate dataSaida) {
         this.itensVenda = itensVenda;
-        this.dataVenda = dataVenda;
+        this.dataSaida = dataSaida;
     }
 
     public List<SaidaItem> getItensVenda() {
@@ -33,11 +33,11 @@ public class Saida extends EntityId {
         this.itensVenda = itensVenda;
     }
 
-    public LocalDate getDataVenda() {
-        return dataVenda;
+    public LocalDate getDataSaida() {
+        return dataSaida;
     }
 
-    public void setDataVenda(LocalDate dataVenda) {
-        this.dataVenda = dataVenda;
+    public void setDataSaida(LocalDate dataSaida) {
+        this.dataSaida = dataSaida;
     }
 }

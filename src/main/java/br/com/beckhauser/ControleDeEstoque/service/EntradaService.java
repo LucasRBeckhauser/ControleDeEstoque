@@ -20,6 +20,12 @@ public class EntradaService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+//    Utilizar o service é o correto. Centralizar no service
+//    private ProdutoService produtoService;
+//
+//    public EntradaService(ProdutoService produtoService) {
+//        this.produtoService = produtoService;
+//    }
 
     //dessa forma tu tem só o obj de compra e n dos itens, o certo é passar
     //por parametro uma lista de compra itens List<CompraItens>
@@ -31,13 +37,13 @@ public class EntradaService {
     @Transactional
     public Entrada realizarCompra(Entrada entrada) throws ValidationException {
 
-        entrada.getItensCompra().forEach(item ->  {
+        entrada.getItensEntrada().forEach(item ->  {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            validarQuantidadePositiva(item.getQuantidadeComprada(), produto.getNome());
+            validarQuantidadePositiva(item.getQuantidadeEntrada(), produto.getNome());
 
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeComprada());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeEntrada());
             produtoRepository.save(produto);
         });
 
@@ -57,23 +63,23 @@ public class EntradaService {
         Entrada entradaAtual = entradaRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Entrada não encontrada para o ID: " + id));
 
-        entradaAtual.getItensCompra().forEach(item -> {
+        entradaAtual.getItensEntrada().forEach(item -> {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
             // Subtrai a quantidade comprada anteriormente do estoque
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeComprada());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeEntrada());
             produtoRepository.save(produto);
         });
 
         // Aplica as novas quantidades da nova entrada
-        novaEntrada.getItensCompra().forEach(item -> {
+        novaEntrada.getItensEntrada().forEach(item -> {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
             // Valida e atualiza o estoque com a nova quantidade
-            validarQuantidadePositiva(item.getQuantidadeComprada(), produto.getNome());
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeComprada());
+            validarQuantidadePositiva(item.getQuantidadeEntrada(), produto.getNome());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeEntrada());
 
             // Atualiza outros atributos do produto
             produto.setNome(item.getProduto().getNome());
@@ -100,15 +106,15 @@ public class EntradaService {
                 .orElseThrow(() -> new ValidationException("Entrada não encontrada para o ID: " + id));
 
         // Para cada item de compra, subtrair a quantidade comprada do estoque
-        entrada.getItensCompra().forEach(item -> {
+        entrada.getItensEntrada().forEach(item -> {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeComprada()) {
+            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeEntrada()) {
                 throw new ValidationException("Erro ao excluir a entrada: o estoque não pode ficar negativo para o produto: " + produto.getNome());
             }
 
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeComprada());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeEntrada());
             produtoRepository.save(produto);
         });
 

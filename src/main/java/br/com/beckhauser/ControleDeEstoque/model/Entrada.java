@@ -8,34 +8,34 @@ import java.util.List;
 @Entity
 public class Entrada extends EntityId {
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EntradaItem> itensCompra;
+    private List<EntradaItem> itensEntrada;
 
     @Column(nullable = false)
-    private LocalDate dataCompra;
+    private LocalDate dataEntrada;
 
 
     public Entrada() {
     }
 
-    public Entrada(List<EntradaItem> itensCompra, LocalDate dataCompra) {
-        this.itensCompra = itensCompra;
-        this.dataCompra = dataCompra;
+    public Entrada(List<EntradaItem> itensCompra, LocalDate dataEntrada) {
+        this.itensEntrada = itensCompra;
+        this.dataEntrada = dataEntrada;
     }
 
-    public List<EntradaItem> getItensCompra() {
-        return itensCompra;
+    public List<EntradaItem> getItensEntrada() {
+        return itensEntrada;
     }
 
-    public void setItensCompra(List<EntradaItem> itensCompra) {
-        this.itensCompra = itensCompra;
+    public void setItensEntrada(List<EntradaItem> itensEntrada) {
+        this.itensEntrada = itensEntrada;
     }
 
-    public LocalDate getDataCompra() {
-        return dataCompra;
+    public LocalDate getDataEntrada() {
+        return dataEntrada;
     }
 
-    public void setDataCompra(LocalDate dataCompra) {
-        this.dataCompra = dataCompra;
+    public void setDataEntrada(LocalDate dataEntrada) {
+        this.dataEntrada = dataEntrada;
     }
 
 }

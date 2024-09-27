@@ -14,20 +14,18 @@ public class EntradaItem extends EntityId{
 
     @ManyToOne
     @JoinColumn(name = "compra_id", nullable = false)
-    private Entrada compra;
+    private Entrada entrada;
 
-    @Column(nullable = false,name = "quantidade_comprada")
-    private int quantidadeComprada;
-
-
+    @Column(nullable = false,name = "quantidade_entrada")
+    private int quantidadeEntrada;
 
     public EntradaItem() {
     }
 
-    public EntradaItem(Produto produto, Entrada entrada, int quantidadeComprada) {
+    public EntradaItem(Produto produto, Entrada entrada, int quantidadeEntrada) {
         this.produto = produto;
-        this.compra = entrada;
-        this.quantidadeComprada = quantidadeComprada;
+        this.entrada = entrada;
+        this.quantidadeEntrada = quantidadeEntrada;
     }
 
     public Produto getProduto() {
@@ -38,19 +36,19 @@ public class EntradaItem extends EntityId{
         this.produto = produto;
     }
 
-    public Entrada getCompra() {
-        return compra;
+    public Entrada getEntrada() {
+        return entrada;
     }
 
-    public void setCompra(Entrada entrada) {
-        this.compra = entrada;
+    public void setEntrada(Entrada entrada) {
+        this.entrada = entrada;
     }
 
-    public int getQuantidadeComprada() {
-        return quantidadeComprada;
+    public int getQuantidadeEntrada() {
+        return quantidadeEntrada;
     }
 
-    public void setQuantidadeComprada(int quantidadeComprada) {
-        this.quantidadeComprada = quantidadeComprada;
+    public void setQuantidadeEntrada(int quantidadeEntrada) {
+        this.quantidadeEntrada = quantidadeEntrada;
     }
 }

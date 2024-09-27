@@ -13,19 +13,19 @@ public class SaidaItem extends EntityId{
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "venda_id", nullable = false)
-    private Saida venda;
+    @JoinColumn(name = "saida_id", nullable = false)
+    private Saida saida;
 
-    @Column(nullable = false,name = "quantidade_vendida")
-    private int quantidadeVendida;
+    @Column(nullable = false,name = "quantidade_saida")
+    private int quantidadeSaida;
 
     public SaidaItem() {
     }
 
-    public SaidaItem(Produto produto, Saida saida, int quantidadeVendida) {
+    public SaidaItem(Produto produto, Saida saida, int quantidadeSaida) {
         this.produto = produto;
-        this.venda = saida;
-        this.quantidadeVendida = quantidadeVendida;
+        this.saida = saida;
+        this.quantidadeSaida = quantidadeSaida;
     }
 
     public Produto getProduto() {
@@ -36,19 +36,19 @@ public class SaidaItem extends EntityId{
         this.produto = produto;
     }
 
-    public Saida getVenda() {
-        return venda;
+    public Saida getSaida() {
+        return saida;
     }
 
-    public void setVenda(Saida saida) {
-        this.venda = saida;
+    public void setSaida(Saida saida) {
+        this.saida = saida;
     }
 
-    public int getQuantidadeVendida() {
-        return quantidadeVendida;
+    public int getQuantidadeSaida() {
+        return quantidadeSaida;
     }
 
-    public void setQuantidadeVendida(int quantidadeVendida) {
-        this.quantidadeVendida = quantidadeVendida;
+    public void setQuantidadeSaida(int quantidadeSaida) {
+        this.quantidadeSaida = quantidadeSaida;
     }
 }

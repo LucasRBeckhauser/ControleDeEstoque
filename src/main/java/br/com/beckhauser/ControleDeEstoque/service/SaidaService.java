@@ -28,13 +28,13 @@ public class SaidaService {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            validarQuantidadePositiva(item.getQuantidadeVendida(), produto.getNome());
+            validarQuantidadePositiva(item.getQuantidadeSaida(), produto.getNome());
 
-            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeVendida()) {
+            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeSaida()) {
                 throw new ValidationException("Estoque insuficiente para o produto: " + produto.getNome());
             }
 
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeVendida());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeSaida());
             produtoRepository.save(produto);
         }
 
@@ -57,7 +57,7 @@ public class SaidaService {
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
             // Adiciona a quantidade vendida anteriormente de volta ao estoque
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeVendida());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeSaida());
             produtoRepository.save(produto);
         });
 
@@ -66,14 +66,14 @@ public class SaidaService {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
-            validarQuantidadePositiva(item.getQuantidadeVendida(), produto.getNome());
+            validarQuantidadePositiva(item.getQuantidadeSaida(), produto.getNome());
 
-            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeVendida()) {
+            if (produto.getQuantidadeEmEstoque() < item.getQuantidadeSaida()) {
                 throw new ValidationException("Estoque insuficiente para o produto: " + produto.getNome());
             }
 
             // Atualiza o estoque com a nova quantidade
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeVendida());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - item.getQuantidadeSaida());
 
             // Atualiza outros atributos do produto
             produto.setNome(item.getProduto().getNome());
@@ -103,7 +103,7 @@ public class SaidaService {
                     .orElseThrow(() -> new ValidationException("Produto não encontrado: " + item.getProduto().getNome()));
 
             // Adiciona a quantidade vendida de volta ao estoque
-            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeVendida());
+            produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + item.getQuantidadeSaida());
             produtoRepository.save(produto);
         });
 
