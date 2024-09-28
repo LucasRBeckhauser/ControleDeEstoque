@@ -22,7 +22,7 @@ public class SaidaService {
     private ProdutoRepository produtoRepository;
 
     @Transactional
-    public Saida realizarVenda(Saida saida) throws ValidationException {
+    public Saida realizarSaida(Saida saida) throws ValidationException {
 
         for (SaidaItem item : saida.getItensVenda()) {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
@@ -87,7 +87,7 @@ public class SaidaService {
     }
 
     // GET
-    public List<Saida> listarVendas() {
+    public List<Saida> listarSaida() {
         return saidaRepository.findAll();
     }
 

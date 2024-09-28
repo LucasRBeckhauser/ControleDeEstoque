@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
-public class ProdutoController {
+public class ProdutoController extends AbstractController{
 
     @Autowired
     private ProdutoService service;

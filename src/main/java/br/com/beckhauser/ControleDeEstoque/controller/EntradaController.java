@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/entradas")
-public class EntradaController {
+public class EntradaController extends AbstractController {
 
     @Autowired
     private EntradaService service;
