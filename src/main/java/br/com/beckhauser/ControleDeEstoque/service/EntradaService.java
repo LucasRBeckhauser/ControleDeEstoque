@@ -35,7 +35,7 @@ public class EntradaService {
 
     //POST
     @Transactional
-    public Entrada realizarCompra(Entrada entrada) throws ValidationException {
+    public Entrada entradaProduto(Entrada entrada) throws ValidationException {
 
         entrada.getItensEntrada().forEach(item ->  {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
@@ -95,7 +95,7 @@ public class EntradaService {
 
 
     // GET
-    public List<Entrada> listarCompras() {
+    public List<Entrada> listarProdutos() {
         return entradaRepository.findAll();
     }
 

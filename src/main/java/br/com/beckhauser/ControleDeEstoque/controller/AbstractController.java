@@ -1,5 +1,4 @@
 package br.com.beckhauser.ControleDeEstoque.controller;
-
 import br.com.beckhauser.ControleDeEstoque.enterprise.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

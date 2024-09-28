@@ -1,5 +1,4 @@
 package br.com.beckhauser.ControleDeEstoque.controller;
-
 import br.com.beckhauser.ControleDeEstoque.model.Entrada;
 import br.com.beckhauser.ControleDeEstoque.service.EntradaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/entrada")
+@RequestMapping("/entradas")
 public class EntradaController {
 
     @Autowired
@@ -18,14 +17,14 @@ public class EntradaController {
 
     @PostMapping
     public ResponseEntity realizarCompra(@RequestBody Entrada entity) {
-        Entrada save = service.realizarCompra(entity);
-        return ResponseEntity.created(URI.create("/entrada" + entity.getId())).body(save);
+        Entrada save = service.entradaProduto(entity);
+        return ResponseEntity.created(URI.create("/entradas" + entity.getId())).body(save);
     }
 
     @GetMapping
     public ResponseEntity acharTodos() {
-        List<Entrada> doacao = service.listarCompras();
-        return ResponseEntity.ok(doacao);
+        List<Entrada> entradas = service.listarProdutos();
+        return ResponseEntity.ok(entradas);
     }
 
     @PutMapping("{id}")
