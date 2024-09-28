@@ -1,6 +1,5 @@
 package br.com.beckhauser.ControleDeEstoque.controller;
 
-import br.com.beckhauser.ControleDeEstoque.model.Entrada;
 import br.com.beckhauser.ControleDeEstoque.model.Saida;
 import br.com.beckhauser.ControleDeEstoque.service.SaidaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +27,15 @@ public class SaidaController extends AbstractController{
         return ResponseEntity.ok(saidas);
     }
 
-//    @PutMapping("{id}")
-//    public ResponseEntity alterarEntrada(@PathVariable("id") Long id, @RequestBody Entrada entity) {
-//        Entrada alterado = service.alterarEntrada(id, entity);
-//        return ResponseEntity.ok().body(alterado);
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public ResponseEntity removeEntrada(@PathVariable("id") Long id) {
-//        service.excluirEntrada(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping("{id}")
+    public ResponseEntity alterarSaida(@PathVariable("id") Long id, @RequestBody Saida entity) {
+        Saida alterado = service.alterarSaida(id, entity);
+        return ResponseEntity.ok().body(alterado);
+    }
 
-
+    @DeleteMapping("{id}")
+    public ResponseEntity removeSaida(@PathVariable("id") Long id) {
+        service.excluirSaida(id);
+        return ResponseEntity.noContent().build();
+    }
 }
