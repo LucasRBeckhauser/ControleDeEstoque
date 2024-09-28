@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 public class Entrada extends EntityId {
-    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "entrada", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EntradaItem> itensEntrada;
 
     @Column(nullable = false)
