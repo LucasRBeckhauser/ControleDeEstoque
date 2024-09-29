@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -21,12 +22,12 @@ public class Usuario extends EntityId implements UserDetails {
     private String senha;
 
     @Column (name = "role", nullable = false)
-    private String role;
+    private UserRole role;
 
     public Usuario() {
     }
 
-    public Usuario(String login, String senha, String role) {
+    public Usuario(String login, String senha, UserRole role) {
         this.login = login;
         this.senha = senha;
         this.role = role;
@@ -40,13 +41,14 @@ public class Usuario extends EntityId implements UserDetails {
         return senha;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
