@@ -2,6 +2,7 @@ package br.com.beckhauser.ControleDeEstoque.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +17,15 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/produtos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/entradas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/saidas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/produtos/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/entradas/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/saidas/**").authenticated()
+                        .anyRequest().authenticated()
+                )
                 .build();
     }
 }
