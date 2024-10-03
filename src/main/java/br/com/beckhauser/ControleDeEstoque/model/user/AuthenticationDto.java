@@ -1,5 +1,5 @@
 package br.com.beckhauser.ControleDeEstoque.model.user;
 
-public record AuthenticationDTO(String login, String senha) {
+public record AuthenticationDto(String login, String senha) {
 
 }

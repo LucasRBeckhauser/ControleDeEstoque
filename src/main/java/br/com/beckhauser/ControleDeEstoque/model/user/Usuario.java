@@ -33,6 +33,7 @@ public class Usuario extends EntityId implements UserDetails {
         this.role = role;
     }
 
+
     public String getLogin() {
         return login;
     }
