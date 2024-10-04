@@ -1,6 +1,8 @@
 package br.com.beckhauser.ControleDeEstoque.controller;
 
+import br.com.beckhauser.ControleDeEstoque.infra.security.TokenService;
 import br.com.beckhauser.ControleDeEstoque.model.user.AuthenticationDto;
+import br.com.beckhauser.ControleDeEstoque.model.user.LoginResponseDTO;
 import br.com.beckhauser.ControleDeEstoque.model.user.RegistroDto;
 import br.com.beckhauser.ControleDeEstoque.model.user.Usuario;
 import br.com.beckhauser.ControleDeEstoque.repository.UserRepository;
@@ -25,12 +27,17 @@ public class AuthenticationController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/registrar")
